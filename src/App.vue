@@ -6,6 +6,7 @@ const delay = 0
 
 const arrSize = 128
 const numbers = ref([])
+const selectedIndex = ref(0)
 
 onMounted(() => reset())
 
@@ -22,6 +23,7 @@ async function bubbleSort() {
   for (let i = 0; i < arrSize; i++) {
     for (let j = 0; j < arrSize - i - 1; j++) {
       if (numbers.value[j + 1] < numbers.value[j]) {
+        selectedIndex.value = j;
         [numbers.value[j + 1], numbers.value[j]] = [numbers.value[j], numbers.value[j + 1]]
         await sleep()
       }
@@ -47,11 +49,20 @@ function reset() {
   </div>
 
   <div class="container">
-    <div v-for="num of numbers" :key="num" class="bar" v-bind:style="{height:calcHeight(num, arrSize)+'%'}"></div>
+    <div v-for="num of numbers" :key="num" :class="(selectedIndex == (num -1)) ? 'selected' : 'bar'"
+      v-bind:style="{height:calcHeight(num, arrSize)+'%'}"></div>
   </div>
 </template>
 
 <style scoped>
+.selected {
+  display: inline-block;
+  min-width: 10px;
+  margin-right: 1px;
+
+  background-color: crimson;
+}
+
 .bar {
   display: inline-block;
   min-width: 10px;
